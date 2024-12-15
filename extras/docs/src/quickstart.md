@@ -104,5 +104,5 @@ zenplate --var-file ~/zenplate_project/vars/vars.yml ~/zenplate_project/template
 
 ## Next Steps
 
-Check out the examples included in the [examples](https://github.com/camratchford/zenplate/tree/master/examples) directory. 
+Check out the examples included in the [examples](https://github.com/camratchford/zenplate/tree/main/extras/examples) directory. 
 These examples will show you how to use the plugin system to extend Zenplate's functionality.

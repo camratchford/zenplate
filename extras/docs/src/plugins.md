@@ -126,5 +126,5 @@ description: An example application
 
 This topic is covered in two examples.
 
-- [Directory Plugin Example](https://github.com/camratchford/zenplate/tree/master/examples/directory_plugin_example)
+- [Directory Plugin Example](https://github.com/camratchford/zenplate/tree/main/extras/examples/directory_plugin_example)
 - [Python Package Plugin Example](https://github.com/camratchford/zenplate/tree/master/examples/python_package_plugin_example)
