@@ -3,7 +3,7 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["zenplate"]
+packages = ["zenplate", "zenplate.plugins"]
 
 [project]
 name = 'zenplate'
@@ -25,7 +25,7 @@ classifiers = [
     'Environment :: MacOS X',
     'Topic :: Software Development :: Libraries :: Python Modules',
 ]
-version = "0.1.1"
+version = "0.1.2"
 requires-python = '>=3.7'
 dependencies = [
     "click==8.1.7",
