@@ -1,0 +1,9 @@
+project_name: Basic Project
+project_stub: basic_project
+project_authors:
+    - name: Cam Ratchford
+      email: camratchford@gmail.com
+    - name: Person McPersonface
+      email: person@mcpersonface.com
+project_url: "https://github.com/camratchford/FastAPI-Template"
+project_git_repo: "https://github.com/camratchford/FastAPI-Template"

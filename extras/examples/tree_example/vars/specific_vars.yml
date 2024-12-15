@@ -1,0 +1,9 @@
+project_name: "Tree Example"
+project_stub: "tree_example"
+project_description: |
+    - This is an example project that demonstrates how to use the `tree` plugin.
+      It is a simple project that generates a directory tree.
+  
+    - There are two variable files, which are merged as a single variable source.
+      This might be useful, as you could use one variable for many projects and another for a specific project.
+      You can use as many variable files as you like, this example just uses two.

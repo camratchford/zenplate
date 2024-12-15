@@ -1,0 +1,20 @@
+var_files:
+  - vars/vars.yml
+jinja_config:
+  trim_blocks: false
+  lstrip_blocks: false
+  keep_trailing_newline: false
+jinja_global_vars: {}
+dry_run: false
+log_level: ERROR
+stdout: false
+force_overwrite: false
+plugin_config:
+  path_modules:
+    - plugins
+  named_modules:
+  - zenplate.plugins.default_plugins.data_plugins
+  - zenplate.plugins.default_plugins.jinja_plugins
+  plugin_kwargs:
+    ls:
+      path: .

@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["zenplate_plugin_example"]
+
+[project]
+name = 'zenplate_plugin_example'
+description = 'A barebones example of what is required in order for Zenplate to autodetect Zenplate plugins that are packaged'
+authors = [
+    {name = 'Edith E. Example', email = 'eee@example.com'},
+]
+
+version = "0.0.1"
+requires-python = '>=3.7'
+dependencies = [
+    "zenplate",
+    "python-slugify"
+]
+
+[project.urls]
+Homepage = 'https://example.com/eee/zenplate_plugin_example'
+Source = 'https://example.com/eee/zenplate_plugin_example'
+

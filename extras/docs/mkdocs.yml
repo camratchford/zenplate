@@ -1,0 +1,35 @@
+site_name: Zenplate Documentation
+site_dir: site
+docs_dir: src
+favicon: img/favicon.ico
+site_url: https://github.com/camratchford/zenplate
+repo_name: camratchford/zenplate
+repo_url: https://github.com/camratchford/zenplate
+plugins:
+  - search:
+      lang: en
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/camratchford/zenplate
+theme:
+  name: material
+extra_css:
+    - static/styles.css
+extra_javascript:
+    - static/scripts.js
+markdown_extensions:
+  - toc:
+      baselevel: 2
+nav:
+  - 'Quickstart': 'quickstart.md'
+  - "User's guide":
+    - 'Command Line Interface Options': 'cli.md'
+    - 'Configuration Reference': 'config.md'
+    - 'Plugins Reference': 'plugins.md'
+    - 'About Variables': 'vars.md'
+  - "Developer's Guide":
+    - 'Testing Reference': 'testing.md'
+    - 'Building Reference': 'building.md'
+
+

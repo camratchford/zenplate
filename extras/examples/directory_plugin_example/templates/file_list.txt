@@ -1,0 +1,10 @@
+{%- for file in file_list %}
+{%- if file is valid_python_module_name %}
+{{ file }}
+{%- else %}
+{{ file | make_slug }}
+{%- endif %}
+{%- endfor %}
+{%- for file in directory_listing %}
+{{ file }}
+{%- endfor %}

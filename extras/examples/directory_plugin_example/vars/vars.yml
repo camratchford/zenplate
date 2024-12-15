@@ -1,0 +1,6 @@
+file_list:
+  - "valid_python_file.py"
+  - "another_valid_python_file.py"
+  - "invalid python file.py"
+  - "Invalid_Python_File.py"
+  - "this_one_is_missing_the_dot_py_extension"

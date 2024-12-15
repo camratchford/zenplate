@@ -1,0 +1,10 @@
+title: How to make a cheeseburger
+description: A simple step by step guide on how to make juicy burgers
+disclaimer: I am not a professional. Any injury, disablement, or deaths caused by the burgers you consume are not my fault.
+toc:
+  - label: Get meat
+    link: ./docs/meats.md
+  - label: Cook meat
+    link: ./docs/cooking.md
+  - label: Enjoy
+    link: ./docs/enjoy.md

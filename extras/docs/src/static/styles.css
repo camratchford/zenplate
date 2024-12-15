@@ -1,0 +1,44 @@
+:root, [data-md-color-scheme=default] {
+    --md-typeset-a-color:  #0dbd8b;
+    --md-typeset-table-color: #f0f0f0;
+}
+
+
+.md-nav__link[for]:focus,
+.md-nav__link[for]:hover,
+.md-nav__link[href]:focus,
+.md-nav__link[href]:hover {
+    color: #262626;
+}
+
+
+.md-header {
+    background: #262626;
+}
+
+.md-nav__link {
+    color: var(--md-typeset-a-color);
+}
+
+.md-grid {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 70vw;
+}
+
+svg {
+    color: var(--md-typeset-a-color);
+}
+
+footer svg {
+    color: unset;
+}
+
+.md-typeset table:not([class]) {
+    max-width: 60vw;
+    border: 1px solid;
+}
+
+.md-typeset table:not([class]) td {
+    padding: 0 0.3rem;
+}

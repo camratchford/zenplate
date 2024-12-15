@@ -1,0 +1,15 @@
+# {{ title }}
+
+{{ description }}
+
+> {{ disclaimer }}
+
+{% if toc %}
+{% for t in toc %}
+- [{{ t.label }}]({{ t.link }})
+{% endfor %}
+{% endif %}
+
+Author: [{{ name }}]({{ github_profile }})
+
+Contact: [{{ email }}](mailto:{{ email }})

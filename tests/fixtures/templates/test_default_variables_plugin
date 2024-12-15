@@ -1,0 +1,8 @@
+
+{%- for path in ls %}
+{% if path is path_exists %}
+{{ path }}
+{%- endif %}
+{%- endfor %}
+
+{{ defaults | to_yaml }}

@@ -1,0 +1,19 @@
+var_files: []
+jinja_config:
+  keep_trailing_newline: false
+  lstrip_blocks: false
+  trim_blocks: false
+jinja_global_vars: {}
+dry_run: false
+log_level: ERROR
+log_path: null
+stdout: false
+force_overwrite: false
+plugin_config:
+  named_modules:
+  - zenplate.plugins.default_plugins.data_plugins
+  - zenplate.plugins.default_plugins.jinja_plugins
+  path_modules: []
+  plugin_kwargs:
+    ls:
+      path: .
