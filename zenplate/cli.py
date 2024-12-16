@@ -1,3 +1,5 @@
+import logging
+from sys import exit, stderr
 from typing import Optional, List
 from typing_extensions import Annotated
 from pathlib import Path
@@ -8,6 +10,10 @@ import click
 
 from zenplate.config import Config
 from zenplate.__main__ import main
+from zenplate.setup_logging import setup_logging
+from zenplate.exceptions import ZenplateException
+
+logger = logging.getLogger(__name__)
 
 
 cli = typer.Typer()
@@ -26,7 +32,6 @@ def run(
     template: Annotated[
         Optional[Path],
         typer.Argument(
-            "template",
             help="The path to the jinja template / directory that zenplate will render",
             dir_okay=True,
             file_okay=True,
@@ -35,7 +40,6 @@ def run(
     output: Annotated[
         Optional[Path],
         typer.Argument(
-            "output",
             help="The path to where you'll find the output of zenplate",
             dir_okay=True,
             file_okay=True,
@@ -112,28 +116,48 @@ def run(
             is_flag=True,
         ),
     ] = False,
+    verbose: Annotated[
+        bool,
+        typer.Option(
+            "--verbose", "-V",
+            help="Enable debug logging",
+            is_flag=True,
+        )] = False,
 ):
-    if (not template and not output) and not export_config:
-        raise click.exceptions.BadArgumentUsage(
-            "You must provide both 'template' and 'output' arguments "
-            "unless the '--help' or '--export-config' flags are provided."
-        )
-    if (template and not output) or (output and not template):
-        raise click.exceptions.BadArgumentUsage(
-            "You must provide both 'template' and 'output' arguments."
-        )
-    if (
-        (template and output.exists())
-        and (template and template.is_dir() and output and not output.is_dir())
-        or (template and template.is_file() and output and not output.is_file())
-    ):
-        raise click.exceptions.BadArgumentUsage(
-            "Template and output paths must both be either directories or files."
-        )
+    try:
+        if (not template and not output) and not export_config:
+            raise click.exceptions.BadArgumentUsage(
+                "You must provide both 'template' and 'output' arguments "
+                "unless the '--help' or '--export-config' flags are provided."
+            )
+        if (template and not output) or (output and not template):
+            raise click.exceptions.BadArgumentUsage(
+                "You must provide both 'template' and 'output' arguments."
+            )
+        # if (
+        #     (template and template.exists()) and (output and output.exists())
+        #     and (template.is_dir() and not output.is_dir())
+        #     or (template.is_file() and not output.is_file())
+        # ):
+        #     raise click.exceptions.BadArgumentUsage(
+        #         "Template and output paths must both be either directories or files."
+        #     )
+    except click.exceptions.BadArgumentUsage as e:
+        typer.echo(str(e), err=True)
+        exit(1)
+    except Exception as e:
+        raise e
 
     config = Config()
     if config_file:
-        config.configure_from_path(config_file)
+        try:
+            config.configure_from_path(config_file)
+        except ZenplateException as e:
+            typer.echo(str(e), err=True)
+            exit(1)
+        except Exception as e:
+            raise e
+
     if log_path:
         config.log_path = log_path
     if variables:
@@ -147,9 +171,8 @@ def run(
     elif not template:
         pass
     else:
-        raise click.exceptions.BadArgumentUsage(
-            f"Template path '{template}' is not a file or directory."
-        )
+        typer.echo(f"Template path '{template}' is not a file or directory.", err=True)
+        exit(1)
     if output:
         config.output_path = Path(output)
     if export_config:
@@ -159,8 +182,15 @@ def run(
     config.force_overwrite = force
     config.stdout = stdout
     config.log_level = log_level
+    config.verbose = verbose
 
-    main(config)
+    try:
+        main(config)
+    except ZenplateException as e:
+        typer.echo(str(e), err=True)
+        exit(1)
+    except Exception as e:
+        raise e
 
 
 if __name__ == "__main__":

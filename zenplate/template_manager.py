@@ -7,8 +7,14 @@ from zenplate.config import Config
 
 from zenplate.plugins.plugin_manager import PluginManager
 from zenplate.plugins import JinjaFilterPlugin, JinjaTestPlugin
+from zenplate.exceptions import ZenplateException
+
 
 logger = logging.getLogger(__name__)
+
+
+class ZenplateVariableException(ZenplateException):
+    pass
 
 
 class TemplateManager(object):

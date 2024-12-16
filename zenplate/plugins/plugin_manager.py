@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 from typing import Type
 
@@ -8,6 +9,14 @@ import inspect
 
 
 from zenplate.plugins.base import Plugin
+from zenplate.exceptions import ZenplateException
+
+
+logger = logging.getLogger(__name__)
+
+
+class ZenplatePluginManagerException(ZenplateException):
+    pass
 
 
 class PluginManager:
@@ -29,20 +38,19 @@ class PluginManager:
         self.plugin_config = plugin_config
         path_modules = self.plugin_config.get("path_modules", [])
 
-        for path_module in path_modules:
-            if not Path(path_module).exists():
-                raise FileNotFoundError(
-                    f"Error loading plugin path module ({path_module}). Path does not exist."
-                )
         found_plugins = {}
         for module in path_modules:
+            if not Path(module).exists():
+                raise ZenplatePluginManagerWarning(
+                    f"Error loading plugin path module ({module}). Path does not exist."
+                )
             found_plugins.update(self.find_plugins_from_path(module))
 
         named_modules = self.plugin_config.get("named_modules", [])
         for module in named_modules:
             loader = pkgutil.find_loader(module)
             if loader is None:
-                raise ModuleNotFoundError(
+                raise ZenplatePluginManagerWarning(
                     f"Error loading plugin named module ({module}). Loader does not exist."
                 )
             found_plugins.update(self.find_plugins_by_module_name(module))
@@ -79,7 +87,7 @@ class PluginManager:
     def find_plugins_from_path(self, module_path: str):
         plugin_dir = Path(module_path).resolve()
         if not Path(module_path).exists():
-            raise FileNotFoundError(f"Plugin module: {module_path} does not exist")
+            raise ZenplatePluginManagerWarning(f"Plugin module: {module_path} does not exist")
         plugins = {}
         for filename in plugin_dir.iterdir():
             filename: Path
@@ -95,7 +103,6 @@ class PluginManager:
                 )
                 module = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(module)
-
                 plugins.update(self.find_plugins_from_module(module))
 
         return plugins
@@ -108,6 +115,7 @@ class PluginManager:
                 and issubclass(obj, self.base_class)
                 and obj != self.base_class
             ):
+                logger.debug(f"Found plugin: {obj.name} in {module.__name__} module")
                 results[obj.name] = obj
 
         return results
@@ -134,7 +142,7 @@ class PluginManager:
     def invoke_plugin(self, plugin_name: str, *args, **kwargs):
         plugin = self._plugins.get(plugin_name)
         if not plugin:
-            raise KeyError(f"Plugin '{plugin_name}' not found in the plugin manager")
+            raise ZenplatePluginManagerException(f"Plugin '{plugin_name}' not found in the plugin manager")
 
         plugin_kwargs = {}
         if plugin and plugin.get("class") and hasattr(plugin.get("class"), "kwargs"):

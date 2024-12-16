@@ -6,9 +6,14 @@ import yaml
 
 from zenplate.plugins.plugin_manager import PluginManager
 from zenplate.plugins import DataPlugin
+from zenplate.exceptions import ZenplateException
 
 
 logger = logging.getLogger(__name__)
+
+
+class ZenplateVariableException(ZenplateException):
+    pass
 
 
 class TemplateData(object):
@@ -32,17 +37,19 @@ class TemplateData(object):
                 self.vars.update(data)
 
             except Exception as e:
-                logger.error(f"Error loading data plugins: {e}")
-                raise
+                raise ZenplateVariableException(f"Error loading data plugins: {e}")
 
     def load_files(self, var_files: Optional[List[Path]] = None):
         for var_file in var_files:
+            logger.debug(f"Loading variables from file: {var_file}")
             if Path(var_file).exists():
                 try:
                     with open(var_file, "r") as file:
-                        self.vars.update(yaml.safe_load(file))
+                        file_vars = yaml.safe_load(file)
+                        logger.debug(f"Loaded variables: {file_vars}")
+                        self.vars.update(file_vars)
                 except Exception as e:
-                    logger.error(e)
+                    raise ZenplateVariableException(f"Error loading data plugins: {e}")
 
     def load(self, variables: Optional[List[str]] = None):
         if variables:
@@ -54,8 +61,16 @@ class TemplateData(object):
                         )
                         continue
                     split_var = v.split("=")
-                    if len(split_var) > 1 and r"\," in split_var[1]:
-                        split_var[1] = split_var[1].split(r"\,")
-                    self.vars[split_var[0]] = split_var[1]
+
+                    if len(split_var) > 1:
+                        var_key = split_var[0]
+                        var_value = split_var[1]
+
+                        if r"\," in split_var[1]:
+                            var_value = split_var[1].split(r"\,")
+
+                        self.vars[var_key] = var_value
+
                 except ValueError as e:
-                    logger.error(f"Variable {v} could not be parsed\n\t{e}")
+                    raise ZenplateVariableException(f"Variable '{v}' could not be parsed {e}")
+
