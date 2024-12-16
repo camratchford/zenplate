@@ -92,6 +92,8 @@ class PluginManager:
             )
         plugins = {}
         for filename in plugin_dir.iterdir():
+            if filename.name.startswith("__"):
+                continue
             filename: Path
             if filename.suffix == ".py":
                 module_name = (
