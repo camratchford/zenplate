@@ -4,9 +4,19 @@ on:
     branches: [ "main" ]
 permissions:
   contents: read
+  id-token: write  # Required for publishing to PyPI
 jobs:
   build_linux:
-    runs-on: ubuntu-latest
+    runs-on:
+      - self-hosted
+      - linux
+      - x64
+    defaults:
+      run:
+        shell: bash
+    environment:
+      name: default
+      url: https://pypi.org/p/zenplate
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
@@ -18,16 +28,21 @@ jobs:
         python -m pip install --upgrade pip
         pip install .[development]
     - name: Build docs
-      run: |
-        extras/scripts/mkdocs.sh
+      run: extras/scripts/mkdocs.sh
     - name: Build pyinstaller
-      run: |
-        powershell extras/scripts/pyinstaller.sh
-    - name: Build pypi
-      run: |
-        powershell extras/scripts/pypi.sh
-  build_windows:
-    runs-on: self-hosted
+      run: extras/scripts/pyinstaller.sh
+    - name: Publish docs
+      run: ${{ secrets.DEPLOY_CMD }}
+    - name: pypi-publish
+      uses: pypa/gh-action-pypi-publish@v1.12.3
+  pyinstaller_windows:
+    runs-on:
+      - self-hosted
+      - windows
+      - x64
+    defaults:
+      run:
+        shell: powershell
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
@@ -38,12 +53,5 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install .[development]
-    - name: Build docs
-      run: |
-        powershell extras/scripts/mkdocs.ps1
     - name: Build pyinstaller
-      run: |
-        powershell extras/scripts/pyinstaller.ps1
-    - name: Build pypi
-      run: |
-        powershell extras/scripts/pypi.ps1
+      run: extras/scripts/pyinstaller.ps1
