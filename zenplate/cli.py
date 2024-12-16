@@ -26,6 +26,7 @@ def run(
     template: Annotated[
         Optional[Path],
         typer.Argument(
+            "template",
             help="The path to the jinja template / directory that zenplate will render",
             dir_okay=True,
             file_okay=True,
@@ -34,6 +35,7 @@ def run(
     output: Annotated[
         Optional[Path],
         typer.Argument(
+            "output",
             help="The path to where you'll find the output of zenplate",
             dir_okay=True,
             file_okay=True,
@@ -42,6 +44,7 @@ def run(
     config_file: Annotated[
         Optional[Path],
         typer.Option(
+            "--config-file", "-c",
             help="The location of the yaml configuration file",
             show_default=True,
             dir_okay=False,
@@ -51,12 +54,14 @@ def run(
     variables: Annotated[
         Optional[List[str]],
         typer.Option(
+            "--variables", "-v",
             help="A 'varname=value' pair representing a variable. May be used multiple times."
         ),
     ] = None,
     var_file: Annotated[
         Optional[List[Path]],
         typer.Option(
+            "--var-file", "-f",
             help="The path to a yaml file containing key: value pairs to be used as variables. "
             "may be used multiple times.",
             dir_okay=False,
@@ -66,6 +71,7 @@ def run(
     log_path: Annotated[
         Optional[Path],
         typer.Option(
+            "--log-path",
             help="The location of the log file",
             dir_okay=False,
             envvar="ZENPLATE_LOG_PATH",
@@ -74,6 +80,7 @@ def run(
     log_level: Annotated[
         Optional[LogLevels],
         typer.Option(
+            "--log-level",
             help="The logging verbosity level",
             show_default=True,
             envvar="ZENPLATE_LOG_LEVEL",
@@ -82,6 +89,7 @@ def run(
     export_config: Annotated[
         bool,
         typer.Option(
+            "--export-config",
             help="When provided, the current set of configuration parameters will be exported "
             "to '--config-file' or './zenplate_config_export.yml' if not provided",
             is_flag=True,
@@ -91,6 +99,7 @@ def run(
     force: Annotated[
         bool,
         typer.Option(
+            "--force", "-f",
             help="When provided, output will overwrite any file in that path",
             is_flag=True,
         ),
@@ -98,6 +107,7 @@ def run(
     stdout: Annotated[
         bool,
         typer.Option(
+            "--stdout",
             help="Write rendered template to stdout",
             is_flag=True,
         ),
