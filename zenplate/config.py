@@ -1,4 +1,5 @@
 import json
+import logging
 import pathlib
 from pathlib import Path
 from typing import Optional, List
@@ -8,6 +9,14 @@ import yaml
 
 from zenplate.setup_logging import setup_logging
 from zenplate.yaml_extras import pathobj_rep
+from zenplate.exceptions import ZenplateException
+
+
+logger = logging.getLogger(__name__)
+
+
+class ZenplateConfigException(ZenplateException):
+    pass
 
 
 class Config:
@@ -23,6 +32,8 @@ class Config:
 
     log_path: Optional[Path] = None
     log_level: str = "ERROR"
+    stdout: bool = False
+    verbose: bool = False
 
     def __init__(self):
         self.config_file: Annotated[Path, "exclude"] = None
@@ -40,6 +51,7 @@ class Config:
         self.log_level: str = "ERROR"
         self.log_path: Optional[Path] = None
         self.stdout: bool = False
+        self.verbose: bool = False
         self.force_overwrite: bool = False
 
         default_plugin_config = {
@@ -57,6 +69,7 @@ class Config:
         self.plugin_config = default_plugin_config
 
         setup_logging(log_path=self.log_path, log_level=self.log_level)
+        logger.debug(f"Config initialized with {self.__dict__}")
 
     def attr_exportable(self, key):
         type_hints = get_type_hints(self, include_extras=True).get(key, None)
@@ -80,25 +93,39 @@ class Config:
 
     def configure_from_path(self, config_file_path):
         """
-        - Reads in a yaml config file, load top level dictionary keys that match the config class'set of attrs.
-        - Will ignore any keys that are contained in the 'self.disallowed_file_attrs' list.
-        - Any attrs ending in 'dir' or 'path' with be cast into a Path object, then resolved.
+        - Reads in a yaml/json config file, load top level dictionary keys that match the config class's set of attrs.
+        - Will ignore any keys that are contained in the 'self.exportable_attrs' list.
+        - Any attrs ending in 'dir','path','file' with be cast into a Path object, then resolved.
         """
         self.config_file = config_file_path
+
+        logger.debug(f"Attempting import of config file {self.config_file}")
+
         if isinstance(self.config_file, Path) and self.config_file.exists():
-            loaded_config = {}
             if self.config_file and self.config_file.exists():
                 if (
                     ".yaml" in self.config_file.suffixes
                     or ".yml" in self.config_file.suffixes
                 ):
                     with open(self.config_file, "r") as file:
+                        logger.debug("YAML extension found for config file")
                         loaded_config = yaml.safe_load(file)
                 elif ".json" in self.config_file.suffixes:
                     with open(self.config_file, "r") as file:
+                        logger.debug("JSON extension found for config file")
                         loaded_config = json.load(file)
+                else:
+                    raise ZenplateConfigException(
+                        f"Config file {self.config_file} is not a valid file type. Must be .yaml or .json"
+                    )
+
                 if loaded_config:
                     for attr, value in loaded_config.items():
+                        if not hasattr(self, attr):
+                            logger.warning(
+                                f"Config file contains unknown attribute: {attr}"
+                            )
+                            continue
                         if hasattr(self, attr) and attr in self.exportable_attrs:
                             if (
                                 attr.endswith("dir")
@@ -111,8 +138,9 @@ class Config:
                                     except TypeError as e:
                                         print(f"Error with {attr}: {e}")
                             setattr(self, attr, value)
+                            logger.debug(f"Configured {attr} with {str(value)}")
 
-        setup_logging()
+        setup_logging(self.log_level, self.log_path)
 
     def export_config(self):
         """

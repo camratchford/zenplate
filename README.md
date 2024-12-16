@@ -1,6 +1,11 @@
+
 # Zenplate
 
-> 'A pluggable CLI templating tool leveraging the powers of Jinja2 and YAML'
+A pluggable CLI templating tool leveraging the powers of Jinja2 and YAML
+
+___
+
+Documentation can be found at [zenplate.scallawag.ca](https://zenplate.scallawag.ca)
 
 ## Features
 
@@ -17,8 +22,6 @@
 - Develop your own data plugins to pull data from databases, APIs, or other sources.
 
 ## Installation
-
-
 
 (Optionally) 
 Clone the repo
@@ -59,6 +62,14 @@ ln -s ~/zenplate/venv/bin/zenplate /usr/local/bin/zenplate
 This is a small hobby project, but I'm open to contributions. Please feel free to report any issues or submit a pull request.
 
 See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for more information.
+
+
+## Built with (Primarily)
+
+- [Jinja2](https://jinja.palletsprojects.com/en/stable/) for templating
+- [PyYAML](https://pyyaml.org/) for parsing / dumping YAML files
+- [Typer](https://typer.tiangolo.com/) for the CLI
+
 
 ## License
 

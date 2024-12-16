@@ -5,3 +5,5 @@ zenplate.exe --var-file vars/specific_vars.yml `
         --var-file vars/general_vars.yml `
         --force `
         templates output_dir
+
+Pop-Location

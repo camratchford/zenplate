@@ -1,4 +1,14 @@
+import logging
 from typing import Type, Callable
+
+from zenplate.exceptions import ZenplateException
+
+
+logger = logging.getLogger(__name__)
+
+
+class ZenplateBasePluginException(ZenplateException):
+    pass
 
 
 class Plugin:
@@ -8,7 +18,7 @@ class Plugin:
 
     def __init__(self):
         if not hasattr(self, "func"):
-            raise TypeError("Used without bound function")
+            raise ZenplateBasePluginException("Used without bound function")
 
     def __repr__(self):
         return self.name
@@ -18,7 +28,10 @@ class Plugin:
 
     @classmethod
     def __call__(cls, *args, **kwargs):
-        return cls.func(*args, **kwargs)
+        try:
+            return cls.func(*args, **kwargs)
+        except Exception as e:
+            ZenplateBasePluginException(f"Error invoking plugin: {e}")
 
 
 def plugin_wrapper(name: str, cls: Type[object], **kwargs):
@@ -29,7 +42,9 @@ def plugin_wrapper(name: str, cls: Type[object], **kwargs):
 
     def decorator(func):
         if not hasattr(cls, "__call__"):
-            raise TypeError("Base class does not have a __call__ method")
+            raise ZenplateBasePluginException(
+                "Base class does not have a __call__ method"
+            )
 
         class_properties = {
             "__module__": getattr(func, "__module__"),
@@ -38,7 +53,11 @@ def plugin_wrapper(name: str, cls: Type[object], **kwargs):
             "func": func,
         }
         class_properties.update(kwargs)
-
-        return type(func.__name__, (cls,), class_properties)
+        try:
+            return type(func.__name__, (cls,), class_properties)
+        except Exception as e:
+            raise ZenplateBasePluginException(
+                f"Error creating plugin from spec: {class_properties}\n{e}"
+            )
 
     return decorator

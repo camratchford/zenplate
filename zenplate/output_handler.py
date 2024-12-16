@@ -2,8 +2,13 @@ import logging
 
 from pathlib import Path
 
+from zenplate.exceptions import ZenplateException
 
 logger = logging.getLogger(__name__)
+
+
+class OutputHandlerException(ZenplateException):
+    pass
 
 
 class OutputHandler(object):
@@ -11,8 +16,15 @@ class OutputHandler(object):
         self.config = config
 
     def write_tree(self, template_dict: dict):
+        if Path(self.config.output_path).exists() and not self.config.force_overwrite:
+            raise OutputHandlerException(
+                f"Output path '{self.config.output_path}' already exists, use --force to overwrite."
+            )
+
         if not Path(self.config.output_path).exists():
-            Path(self.config.output_path).mkdir(mode=755)
+            logger.debug(f"Creating output directory {self.config.output_path}")
+            Path(self.config.output_path).mkdir(mode=0o755, parents=True)
+
         if template_dict:
             for template, properties in template_dict.items():
                 name = template
@@ -20,12 +32,11 @@ class OutputHandler(object):
                 parent_path = path.parent.resolve()
                 content = properties.get("content")
                 if not parent_path.exists():
-                    parent_path.mkdir(mode=755)
-
+                    logger.debug(f"Creating parent directory {parent_path}")
+                    parent_path.mkdir(mode=0o755, parents=True)
                 try:
                     logger.info(f"Writing {name}")
-
-                    path.touch(exist_ok=True)
+                    path.touch(exist_ok=True, mode=0o755)
                     path.write_text(content, encoding="utf-8")
                 except Exception as e:
                     logger.error(e, f"Could not write {name}")
@@ -41,8 +52,8 @@ class OutputHandler(object):
                 return
             parent_path = path.parent.resolve()
             content = properties.get("content")
-
             if not parent_path.exists():
+                logger.debug(f"Creating parent directory {parent_path}")
                 parent_path.mkdir(mode=0o755, parents=True)
             try:
                 logger.info(f"Writing {name}")

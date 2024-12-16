@@ -95,7 +95,7 @@ def test_multiple_plugin_managers():
     jinja_filter_plugin_class = jinja_filter_manager.plugins.get("jinja_filter")
     jinja_filter_plugin_result = jinja_filter_plugin_class(["abc", "ab", "a"])
 
-    assert jinja_filter_plugin_result == "['abc', 'ab']"
+    assert jinja_filter_plugin_result == ["abc", "ab"]
 
 
 def test_plugin_manager_construct_plugins_dict():
