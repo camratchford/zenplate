@@ -29,7 +29,11 @@ class OutputHandler(object):
             for template, properties in template_dict.items():
                 name = template
                 path = properties.get("path")
+                parent_path = path.parent.resolve()
                 content = properties.get("content")
+                if not parent_path.exists():
+                    logger.debug(f"Creating parent directory {parent_path}")
+                    parent_path.mkdir(mode=0o755, parents=True)
                 try:
                     logger.info(f"Writing {name}")
                     path.touch(exist_ok=True, mode=0o755)
@@ -48,7 +52,6 @@ class OutputHandler(object):
                 return
             parent_path = path.parent.resolve()
             content = properties.get("content")
-
             if not parent_path.exists():
                 logger.debug(f"Creating parent directory {parent_path}")
                 parent_path.mkdir(mode=0o755, parents=True)
