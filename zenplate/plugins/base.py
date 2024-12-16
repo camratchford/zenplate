@@ -42,7 +42,9 @@ def plugin_wrapper(name: str, cls: Type[object], **kwargs):
 
     def decorator(func):
         if not hasattr(cls, "__call__"):
-            raise ZenplateBasePluginException("Base class does not have a __call__ method")
+            raise ZenplateBasePluginException(
+                "Base class does not have a __call__ method"
+            )
 
         class_properties = {
             "__module__": getattr(func, "__module__"),
@@ -54,6 +56,8 @@ def plugin_wrapper(name: str, cls: Type[object], **kwargs):
         try:
             return type(func.__name__, (cls,), class_properties)
         except Exception as e:
-            raise ZenplateBasePluginException(f"Error creating plugin from spec: {class_properties}\n{e}")
+            raise ZenplateBasePluginException(
+                f"Error creating plugin from spec: {class_properties}\n{e}"
+            )
 
     return decorator

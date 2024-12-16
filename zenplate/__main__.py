@@ -39,12 +39,12 @@ def main(config: Config):
         raise ZenplateException(f"Error merging template_vars with globals: {e}")
 
     if config.dry_run:
-        logger.debug(f"Dry run complete, exiting.")
+        logger.debug("Dry run complete, exiting.")
         sys.exit(0)
 
     # Initialize the file handler
     try:
-        logger.debug(f"Initializing output handler")
+        logger.debug("Initializing output handler")
         output_handler = OutputHandler(config)
     except ZenplateException as e:
         raise e
@@ -72,7 +72,7 @@ def main(config: Config):
             raise ZenplateException(f"Error writing template output: {e}")
 
         if config.stdout:
-            logger.debug(f"Writing template contents to stdout")
+            logger.debug("Writing template contents to stdout")
             output_handler.write_stdout(output_path)
 
     elif templater.tree_dir:
@@ -91,4 +91,3 @@ def main(config: Config):
             raise e
         except Exception as e:
             raise ZenplateException(f"Error writing tree output: {e}")
-

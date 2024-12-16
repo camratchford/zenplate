@@ -108,11 +108,11 @@ class Config:
                     or ".yml" in self.config_file.suffixes
                 ):
                     with open(self.config_file, "r") as file:
-                        logger.debug(f"YAML extension found for config file")
+                        logger.debug("YAML extension found for config file")
                         loaded_config = yaml.safe_load(file)
                 elif ".json" in self.config_file.suffixes:
                     with open(self.config_file, "r") as file:
-                        logger.debug(f"JSON extension found for config file")
+                        logger.debug("JSON extension found for config file")
                         loaded_config = json.load(file)
                 else:
                     raise ZenplateConfigException(
@@ -122,7 +122,9 @@ class Config:
                 if loaded_config:
                     for attr, value in loaded_config.items():
                         if not hasattr(self, attr):
-                            logger.warning(f"Config file contains unknown attribute: {attr}")
+                            logger.warning(
+                                f"Config file contains unknown attribute: {attr}"
+                            )
                             continue
                         if hasattr(self, attr) and attr in self.exportable_attrs:
                             if (

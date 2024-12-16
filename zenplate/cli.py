@@ -1,5 +1,5 @@
 import logging
-from sys import exit, stderr
+from sys import exit
 from typing import Optional, List
 from typing_extensions import Annotated
 from pathlib import Path
@@ -10,7 +10,6 @@ import click
 
 from zenplate.config import Config
 from zenplate.__main__ import main
-from zenplate.setup_logging import setup_logging
 from zenplate.exceptions import ZenplateException
 
 logger = logging.getLogger(__name__)
@@ -48,7 +47,8 @@ def run(
     config_file: Annotated[
         Optional[Path],
         typer.Option(
-            "--config-file", "-c",
+            "--config-file",
+            "-c",
             help="The location of the yaml configuration file",
             show_default=True,
             dir_okay=False,
@@ -58,14 +58,16 @@ def run(
     variables: Annotated[
         Optional[List[str]],
         typer.Option(
-            "--variables", "-v",
-            help="A 'varname=value' pair representing a variable. May be used multiple times."
+            "--variables",
+            "-v",
+            help="A 'varname=value' pair representing a variable. May be used multiple times.",
         ),
     ] = None,
     var_file: Annotated[
         Optional[List[Path]],
         typer.Option(
-            "--var-file", "-f",
+            "--var-file",
+            "-f",
             help="The path to a yaml file containing key: value pairs to be used as variables. "
             "may be used multiple times.",
             dir_okay=False,
@@ -103,7 +105,8 @@ def run(
     force: Annotated[
         bool,
         typer.Option(
-            "--force", "-f",
+            "--force",
+            "-f",
             help="When provided, output will overwrite any file in that path",
             is_flag=True,
         ),
@@ -119,10 +122,12 @@ def run(
     verbose: Annotated[
         bool,
         typer.Option(
-            "--verbose", "-V",
+            "--verbose",
+            "-V",
             help="Enable debug logging",
             is_flag=True,
-        )] = False,
+        ),
+    ] = False,
 ):
     try:
         if (not template and not output) and not export_config:

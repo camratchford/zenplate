@@ -17,4 +17,3 @@ class DataPlugin(Plugin):
             return cls.func(*args, **kwargs)
         except Exception as e:
             raise ZenplateDataPluginException(f"Error invoking data plugin: {e}")
-

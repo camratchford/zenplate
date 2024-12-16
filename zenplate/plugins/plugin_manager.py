@@ -41,7 +41,7 @@ class PluginManager:
         found_plugins = {}
         for module in path_modules:
             if not Path(module).exists():
-                raise ZenplatePluginManagerWarning(
+                raise ZenplatePluginManagerException(
                     f"Error loading plugin path module ({module}). Path does not exist."
                 )
             found_plugins.update(self.find_plugins_from_path(module))
@@ -50,7 +50,7 @@ class PluginManager:
         for module in named_modules:
             loader = pkgutil.find_loader(module)
             if loader is None:
-                raise ZenplatePluginManagerWarning(
+                raise ZenplatePluginManagerException(
                     f"Error loading plugin named module ({module}). Loader does not exist."
                 )
             found_plugins.update(self.find_plugins_by_module_name(module))
@@ -87,7 +87,9 @@ class PluginManager:
     def find_plugins_from_path(self, module_path: str):
         plugin_dir = Path(module_path).resolve()
         if not Path(module_path).exists():
-            raise ZenplatePluginManagerWarning(f"Plugin module: {module_path} does not exist")
+            raise ZenplatePluginManagerException(
+                f"Plugin module: {module_path} does not exist"
+            )
         plugins = {}
         for filename in plugin_dir.iterdir():
             filename: Path
@@ -142,7 +144,9 @@ class PluginManager:
     def invoke_plugin(self, plugin_name: str, *args, **kwargs):
         plugin = self._plugins.get(plugin_name)
         if not plugin:
-            raise ZenplatePluginManagerException(f"Plugin '{plugin_name}' not found in the plugin manager")
+            raise ZenplatePluginManagerException(
+                f"Plugin '{plugin_name}' not found in the plugin manager"
+            )
 
         plugin_kwargs = {}
         if plugin and plugin.get("class") and hasattr(plugin.get("class"), "kwargs"):

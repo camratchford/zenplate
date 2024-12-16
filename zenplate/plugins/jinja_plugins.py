@@ -16,7 +16,9 @@ class JinjaFilterPlugin(Plugin):
         try:
             return cls.func(*args, **kwargs)
         except Exception as e:
-            raise ZenplateJinjaPluginException(f"Error invoking Jinja filter plugin: {e}")
+            raise ZenplateJinjaPluginException(
+                f"Error invoking Jinja filter plugin: {e}"
+            )
 
 
 class JinjaTestPlugin(Plugin):
@@ -26,4 +28,3 @@ class JinjaTestPlugin(Plugin):
             return bool(cls.func(*args, **kwargs))
         except Exception as e:
             raise ZenplateJinjaPluginException(f"Error invoking Jinja test plugin: {e}")
-

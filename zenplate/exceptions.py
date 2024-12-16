@@ -1,5 +1,1 @@
-
-
-class ZenplateException(Exception):
-    ...
-
+class ZenplateException(Exception): ...

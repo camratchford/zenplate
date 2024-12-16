@@ -72,5 +72,6 @@ class TemplateData(object):
                         self.vars[var_key] = var_value
 
                 except ValueError as e:
-                    raise ZenplateVariableException(f"Variable '{v}' could not be parsed {e}")
-
+                    raise ZenplateVariableException(
+                        f"Variable '{v}' could not be parsed {e}"
+                    )
