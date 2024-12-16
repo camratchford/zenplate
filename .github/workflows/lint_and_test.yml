@@ -2,7 +2,7 @@ name: Lint and Test
 on:
   push:
     branches:
-      - 0.1.*`
+      - '*.**.*'
 permissions:
   contents: read
 jobs:
