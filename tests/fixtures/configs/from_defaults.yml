@@ -8,6 +8,7 @@ dry_run: false
 log_level: ERROR
 log_path: null
 stdout: false
+verbose: false
 force_overwrite: false
 plugin_config:
   named_modules:
