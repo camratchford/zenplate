@@ -7,7 +7,6 @@ import importlib.util
 import pkgutil
 import inspect
 
-
 from zenplate.plugins.base import Plugin
 from zenplate.exceptions import ZenplateException
 
@@ -71,7 +70,7 @@ class PluginManager:
     def find_matching_plugins(self):
         matching_modules = [
             importlib.import_module(name)
-            for finder, name, ispkg in pkgutil.iter_modules()
+            for finder, name, is_pkg in pkgutil.iter_modules()
             if name.startswith(self.plugin_search_string)
         ]
 
