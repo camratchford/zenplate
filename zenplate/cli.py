@@ -49,7 +49,7 @@ def run(
         typer.Option(
             "--config-file",
             "-c",
-            help="The location of the yaml configuration file",
+            help="The location of the YAML configuration file",
             show_default=True,
             dir_okay=False,
             envvar="ZENPLATE_CONFIG_FILE",
@@ -68,8 +68,8 @@ def run(
         typer.Option(
             "--var-file",
             "-f",
-            help="The path to a yaml file containing key: value pairs to be used as variables. "
-            "may be used multiple times.",
+            help="The path to a YAML file containing key: value pairs to be used as variables. "
+            "May be used multiple times.",
             dir_okay=False,
             envvar="ZENPLATE_VAR_FILE",
         ),
