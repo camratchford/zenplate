@@ -58,7 +58,7 @@ def run(
     variables: Annotated[
         Optional[List[str]],
         typer.Option(
-            "--variables",
+            "--var",
             "-v",
             help="A 'varname=value' pair representing a variable. May be used multiple times.",
         ),
