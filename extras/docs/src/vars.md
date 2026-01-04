@@ -16,5 +16,5 @@ These variable sources are applied in order, with later sources overwriting earl
   - Can be used multiple times `--var-file="file1.yaml" --var-file="file2.yaml"`
   - Variables follow standard [YAML syntax](https://yaml.org/spec/1.2.2/)
 - Inline variables
-  - CLI option `--variables="key=value"`
-  - Can be used multiple times `--variables="key1=value1" --variables="key2=value2"`
+  - CLI option `--var="key=value"`
+  - Can be used multiple times `--var="key1=value1" --var="key2=value2"`
