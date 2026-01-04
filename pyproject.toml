@@ -22,8 +22,6 @@ classifiers = [
     'Intended Audience :: System Administrators',
     'Operating System :: POSIX :: Linux',
     'Environment :: Console',
-    'Environment :: Win32 (MS Windows)',
-    'Environment :: MacOS X',
     'Topic :: Software Development :: Build Tools',
     'Topic :: Utilities',
 ]
