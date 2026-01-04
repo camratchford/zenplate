@@ -1,5 +1,6 @@
 import logging
 import logging.config
+import rich.logging
 
 
 def setup_logging(log_level: str = "ERROR", log_path: str = None):
