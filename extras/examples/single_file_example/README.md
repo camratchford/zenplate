@@ -12,5 +12,5 @@ Using the various command line options, you can specify the template, variables,
 
 1. Ensure the zenplate package is installed, see the main README.md for more information.
 2. Run the corresponding `run_example.sh` / `run_example.ps1` script to execute the example.
-3. Try modifying the inline `--variables` argument or the contents of `vars/vars.yml` to see how the output changes.
+3. Try modifying the inline `--var` argument or the contents of `vars/vars.yml` to see how the output changes.
 4. Inspect the files in the `output_dir` directory to see the results.

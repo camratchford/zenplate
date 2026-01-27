@@ -16,7 +16,7 @@ Zenplate has 2 positional arguments, they are both required unless the `--export
 | Option                    | Type        | Description                                                                                |
 |---------------------------|-------------|--------------------------------------------------------------------------------------------|
 | `--config-file`           | path (file) | The location of the yaml configuration file                                                |
-| `--variables`             | text        | A 'varname=value' pair representing a variable, may be used multiple times                 |
+| `--var`                   | text        | A 'varname=value' pair representing a variable, may be used multiple times                 |
 | `--var-file`              | path (file) | The path to a yaml file containing key: value pairs, representing variables                |
 | `--log-path`              | path (file) | The location of the log file                                                               |
 | `--export-config`         | flag        | When true, the current set of configuration parameters will be exported to `--config-file` |

@@ -3,7 +3,8 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["zenplate", "zenplate.plugins"]
+packages = ["zenplate", "zenplate.plugins", "zenplate.plugins.default_plugins"]
+package-dir = {"zenplate" = "zenplate", "zenplate.plugins" = "zenplate/plugins", "zenplate.plugins.default_plugins" = "zenplate/plugins/default_plugins"}
 
 [project]
 name = 'zenplate'
@@ -21,12 +22,11 @@ classifiers = [
     'Intended Audience :: System Administrators',
     'Operating System :: POSIX :: Linux',
     'Environment :: Console',
-    'Environment :: Win32 (MS Windows)',
-    'Environment :: MacOS X',
-    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Topic :: Software Development :: Build Tools',
+    'Topic :: Utilities',
 ]
-version = "0.1.2"
-requires-python = '>=3.7'
+version = "0.1.3"
+requires-python = '>=3.10'
 dependencies = [
     "click==8.1.7",
     "colorama==0.4.6",
