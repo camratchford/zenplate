@@ -3,8 +3,8 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["zenplate", "zenplate.plugins", "zenplate.plugins.default_plugins"]
-package-dir = {"zenplate" = "zenplate", "zenplate.plugins" = "zenplate/plugins", "zenplate.plugins.default_plugins" = "zenplate/plugins/default_plugins"}
+packages = ["zenplate", "zenplate.plugins", "zenplate.plugins.default_plugins", "zenplate.scripts"]
+package-dir = {"zenplate" = "zenplate", "zenplate.plugins" = "zenplate/plugins", "zenplate.plugins.default_plugins" = "zenplate/plugins/default_plugins", "zenplate.scripts" = "extras/scripts"}
 
 [project]
 name = 'zenplate'
@@ -25,21 +25,13 @@ classifiers = [
     'Topic :: Software Development :: Build Tools',
     'Topic :: Utilities',
 ]
-version = "0.1.3"
+version = "0.2.0"
 requires-python = '>=3.10'
 dependencies = [
-    "click==8.1.7",
-    "colorama==0.4.6",
+    "byoconfig==1.2.3",
     "Jinja2==3.1.2",
-    "markdown-it-py==3.0.0",
-    "MarkupSafe==2.1.3",
-    "mdurl==0.1.2",
-    "Pygments==2.16.1",
     "PyYAML==6.0.1",
-    "rich==13.6.0",
-    "shellingham==1.5.4",
     "typer==0.15.1",
-    "typing_extensions==4.8.0",
 ]
 
 [project.optional-dependencies]
@@ -48,8 +40,6 @@ development = [
     "mkdocs-material",
     "ruff",
     "pytest",
-    "mypy",
-    "pyinstaller",
     "build",
     "twine"
 ]
@@ -60,6 +50,11 @@ Source = 'https://github.com/camratchford/zenplate'
 
 [project.scripts]
 zenplate = "zenplate.cli:cli"
+zenplate-version-bump = "zenplate.scripts.bump_version:cli"
+zenplate-build-and-publish = "zenplate.scripts.build_and_publish:cli"
+zenplate-format-and-lint = "zenplate.scripts.format_and_lint:cli"
+zenplate-run-tests = "zenplate.scripts.run_tests:cli"
+zenplate-do-release = "zenplate.scripts.do_github_release:cli"
 
 [tool.ruff]
 exclude = [

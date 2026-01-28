@@ -139,29 +139,15 @@ def run(
             raise click.exceptions.BadArgumentUsage(
                 "You must provide both 'template' and 'output' arguments."
             )
-        # if (
-        #     (template and template.exists()) and (output and output.exists())
-        #     and (template.is_dir() and not output.is_dir())
-        #     or (template.is_file() and not output.is_file())
-        # ):
-        #     raise click.exceptions.BadArgumentUsage(
-        #         "Template and output paths must both be either directories or files."
-        #     )
+
     except click.exceptions.BadArgumentUsage as e:
         typer.echo(str(e), err=True)
         exit(1)
+
     except Exception as e:
         raise e
 
-    config = Config()
-    if config_file:
-        try:
-            config.configure_from_path(config_file)
-        except ZenplateException as e:
-            typer.echo(str(e), err=True)
-            exit(1)
-        except Exception as e:
-            raise e
+    config = Config(file_path=config_file)
 
     if log_path:
         config.log_path = log_path
@@ -178,10 +164,9 @@ def run(
     else:
         typer.echo(f"Template path '{template}' is not a file or directory.", err=True)
         exit(1)
-    if output:
+    if output and export_config:
         config.output_path = Path(output)
-    if export_config:
-        config.export_config()
+        config.dump_to_file(config.output_path)
         exit(0)
 
     config.force_overwrite = force

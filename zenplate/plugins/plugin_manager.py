@@ -47,7 +47,7 @@ class PluginManager:
 
         named_modules = self.plugin_config.get("named_modules", [])
         for module in named_modules:
-            loader = pkgutil.find_loader(module)
+            loader = importlib.util.find_spec(module)
             if loader is None:
                 raise ZenplatePluginManagerException(
                     f"Error loading plugin named module ({module}). Loader does not exist."
@@ -73,8 +73,11 @@ class PluginManager:
             for finder, name, is_pkg in pkgutil.iter_modules()
             if name.startswith(self.plugin_search_string)
         ]
-
         plugins = {}
+        plugin_names = [
+            name for finder, name, is_pkg in pkgutil.iter_modules() if is_pkg
+        ]
+        print(sorted(plugin_names))
 
         # todo: I'm sure there's a better way
         for module in matching_modules:

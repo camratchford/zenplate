@@ -29,6 +29,7 @@ class TemplateManager(object):
             self.env = Environment(
                 loader=FileSystemLoader(self.template_parent),
                 autoescape=select_autoescape(),
+                **config.get_by_prefix(prefix="jinja_env", trim_prefix=True),
             )
         elif self.tree_dir:
             self.tree_dir = Path(config.tree_directory)
@@ -36,17 +37,7 @@ class TemplateManager(object):
                 loader=FileSystemLoader(self.tree_dir),
                 autoescape=select_autoescape(),
             )
-        self.configure_jinja(config.jinja_config)
         self.load_plugins()
-
-    def configure_jinja(self, jinja_conf: dict):
-        # Load jinja settings
-        for attr in jinja_conf.keys():
-            if hasattr(self.env, attr):
-                try:
-                    setattr(self.env, attr, jinja_conf[attr])
-                except Exception as e:
-                    logger.error(e)
 
     def load_plugins(self):
         if self.config.plugin_config:
