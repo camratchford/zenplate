@@ -43,6 +43,7 @@ def test_plugin_manager_find_plugins_by_module_name():
 def test_plugin_manager_find_matching_plugins():
     plugin_manager = PluginManager(DataPlugin)
     plugins = plugin_manager.find_matching_plugins()
+    assert plugins
     assert "data" in plugins.keys()
 
 
@@ -64,7 +65,13 @@ def test_plugin_manager_find_plugins_from_module():
 
 def test_plugin_manager_specificity():
     plugin_manager = PluginManager(JinjaTestPlugin)
-    module = importlib.import_module("zenplate_plugin_test.jinja_plugins")
+    try:
+        module = importlib.import_module("zenplate_plugin_test.jinja_plugins")
+    except ImportError as e:
+        raise ImportError(
+            "You must install the zenplate_plugin_test package by running:\n"
+            "pip install tests/fixtures/plugin_module_for_matched_import"
+        ) from e
     plugins = plugin_manager.find_plugins_from_module(module)
     assert "jinja_test" in plugins.keys()
     assert "jinja_filter" not in plugins.keys()

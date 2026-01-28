@@ -1,20 +1,20 @@
-var_files: []
-jinja_config:
-  trim_blocks: false
-  lstrip_blocks: false
-  keep_trailing_newline: false
-jinja_global_vars: {}
 dry_run: false
+force_overwrite: false
+jinja_env_keep_trailing_newline: false
+jinja_env_lstrip_blocks: false
+jinja_env_trim_blocks: false
+jinja_global_vars: {}
 log_level: ERROR
 log_path: null
-stdout: false
-verbose: false
-force_overwrite: false
 plugin_config:
-  path_modules: []
   named_modules:
   - zenplate.plugins.default_plugins.data_plugins
   - zenplate.plugins.default_plugins.jinja_plugins
+  path_modules: []
   plugin_kwargs:
     ls:
       path: .
+stdout: false
+var_files: []
+variables: []
+verbose: false

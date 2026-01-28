@@ -16,7 +16,7 @@ def test_config_init():
     assert config.template_path is None
     assert config.tree_directory is None
     assert config.output_path is None
-    assert config.jinja_config == {
+    assert config.get_by_prefix("jinja_env", trim_prefix=True) == {
         "trim_blocks": False,
         "lstrip_blocks": False,
         "keep_trailing_newline": False,
@@ -46,16 +46,16 @@ def test_config_configure_from_path():
 
     config_path = fixtures.parent.joinpath("output", "exported_config.yml")
     config.config_file = config_path
-    config.export_config()
+    config.dump_to_file(config.config_file)
 
     sleep(1)
-    config.configure_from_path(config_path)
+    config.load_from_file(config_path)
     non_matching = [
         k
-        for k, v in config2.__dict__.items()
-        if k in config.__dict__.keys()
+        for k, v in config2._data.items()
+        if k in config._data.keys()
         and k != "config_file"
-        and config.__dict__[k] != config2.__dict__[k]
+        and config.get(k) != config2.get(k)
     ]
 
     if non_matching:
@@ -65,10 +65,9 @@ def test_config_configure_from_path():
 def test_config_export_config():
     config = Config()
     default_config_file = fixtures / "configs" / "from_defaults.yml"
-    config.configure_from_path(default_config_file)
+    config.dump_to_file(default_config_file)
     config.config_file = fixtures / "output" / "exported_config.yml"
-
-    config.export_config()
+    config.dump_to_file(config.config_file)
 
     assert default_config_file.read_text() == config.config_file.read_text()
 
