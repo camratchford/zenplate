@@ -1,17 +1,13 @@
-from pathlib import Path
-from argparse import ArgumentParser
 import shutil
-
-import build
+from argparse import ArgumentParser
+from pathlib import Path
 
 import twine.commands.upload
 from twine.settings import Settings
 
-from .common import (
-    project_root,
-    check_package_installed_as_editable,
-    check_branch,
-)
+import build
+
+from .common import check_branch, check_package_installed_as_editable, project_root
 
 default_dist_path = project_root / "dist"
 
@@ -53,9 +49,7 @@ def cli():
         default=default_dist_path,
         help="Where to put the dist files",
     )
-    parser.add_argument(
-        "--publish", action="store_true", help="Publish to PyPi after build"
-    )
+    parser.add_argument("--publish", action="store_true", help="Publish to PyPi after build")
     args = parser.parse_args()
 
     check_package_installed_as_editable()

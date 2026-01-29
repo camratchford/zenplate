@@ -1,8 +1,7 @@
+from config_fixtures import fixtures, new_config
 from jinja2.exceptions import TemplateNotFound
 
-
 from zenplate.template_manager import TemplateManager
-from config_fixtures import new_config, fixtures
 
 
 def template_manager_loads_template():

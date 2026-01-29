@@ -1,8 +1,8 @@
 import datetime
-from pathlib import Path
-from zenplate.plugins.plugin_manager import PluginManager
-
 import os
+from pathlib import Path
+
+from zenplate.plugins.plugin_manager import PluginManager
 
 plugin_manager = PluginManager()
 
@@ -28,10 +28,7 @@ def test_list_path_contents():
 
 def test_jinja_test_path_exists():
     plugin_manager.load_plugins(plugin_config)
-    assert (
-        plugin_manager.invoke_plugin("path_exists", Path(__file__).resolve())
-        is not None
-    )
+    assert plugin_manager.invoke_plugin("path_exists", Path(__file__).resolve()) is not None
     assert plugin_manager.invoke_plugin("path_exists", Path(__file__).resolve())
 
 
@@ -44,9 +41,7 @@ def test_jinja_filter_now():
 
 def test_jinja_filter_datetime_format():
     plugin_manager.load_plugins(plugin_config)
-    output = plugin_manager.invoke_plugin(
-        "datetime_format", datetime.datetime.now(), fmt="%Y-%m-%d"
-    )
+    output = plugin_manager.invoke_plugin("datetime_format", datetime.datetime.now(), fmt="%Y-%m-%d")
     assert output is not None
     assert output == datetime.datetime.now().strftime("%Y-%m-%d")
 

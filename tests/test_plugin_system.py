@@ -1,15 +1,15 @@
 import importlib
 
-from zenplate.plugins.plugin_manager import PluginManager
+from config_fixtures import fixtures
+
 from zenplate.plugins import (
+    DataPlugin,
+    JinjaFilterPlugin,
+    JinjaTestPlugin,
     Plugin,
     plugin_wrapper,
-    DataPlugin,
-    JinjaTestPlugin,
-    JinjaFilterPlugin,
 )
-
-from config_fixtures import fixtures
+from zenplate.plugins.plugin_manager import PluginManager
 
 
 @plugin_wrapper("decorated_function", Plugin)
@@ -34,9 +34,7 @@ def jinja_filter_plugin(a_list: list):
 
 def test_plugin_manager_find_plugins_by_module_name():
     plugin_manager = PluginManager(DataPlugin)
-    plugins = plugin_manager.find_plugins_by_module_name(
-        "zenplate_plugin_test.data_plugins"
-    )
+    plugins = plugin_manager.find_plugins_by_module_name("zenplate_plugin_test.data_plugins")
     assert "data" in plugins.keys()
 
 
@@ -48,9 +46,7 @@ def test_plugin_manager_find_matching_plugins():
 
 
 def test_plugin_manager_find_plugins_from_path():
-    path_to_module = (
-        fixtures / "plugin_module_for_matched_import" / "zenplate_plugin_test"
-    )
+    path_to_module = fixtures / "plugin_module_for_matched_import" / "zenplate_plugin_test"
     plugin_manager = PluginManager(DataPlugin)
     plugins = plugin_manager.find_plugins_from_path(str(path_to_module))
     assert "data" in plugins.keys()

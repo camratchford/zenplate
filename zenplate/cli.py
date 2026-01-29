@@ -1,15 +1,15 @@
 import logging
-from sys import exit
-from typing import Optional, List
-from typing_extensions import Annotated
-from pathlib import Path
 from enum import Enum
+from pathlib import Path
+from sys import exit
+from typing import List, Optional
 
-import typer
 import click
+import typer
+from typing_extensions import Annotated
 
-from zenplate.config import Config
 from zenplate.__main__ import main
+from zenplate.config import Config
 from zenplate.exceptions import ZenplateException
 
 logger = logging.getLogger(__name__)
@@ -136,9 +136,7 @@ def run(
                 "unless the '--help' or '--export-config' flags are provided."
             )
         if (template and not output) or (output and not template):
-            raise click.exceptions.BadArgumentUsage(
-                "You must provide both 'template' and 'output' arguments."
-            )
+            raise click.exceptions.BadArgumentUsage("You must provide both 'template' and 'output' arguments.")
 
     except click.exceptions.BadArgumentUsage as e:
         typer.echo(str(e), err=True)

@@ -1,8 +1,9 @@
-from io import StringIO
 import sys
+from io import StringIO
+
+from config_fixtures import fixtures, new_config
 
 from zenplate.output_handler import OutputHandler
-from config_fixtures import new_config, fixtures
 
 
 def test_output_handler_write_file():
@@ -38,10 +39,7 @@ def test_output_handler_write_tree():
     output_handler.write_tree(template_dict)
 
     assert all(template_dict[k]["path"].exists() for k, v in template_dict.items())
-    assert all(
-        template_dict[k]["path"].read_text() == template_dict[k]["content"]
-        for k, v in template_dict.items()
-    )
+    assert all(template_dict[k]["path"].read_text() == template_dict[k]["content"] for k, v in template_dict.items())
 
 
 def test_output_handler_write_stdout(monkeypatch):

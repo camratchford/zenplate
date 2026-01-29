@@ -39,6 +39,7 @@ development = [
     "mkdocs",
     "mkdocs-material",
     "ruff",
+    "isort",
     "pytest",
     "build",
     "twine"
@@ -56,6 +57,7 @@ zenplate-format-and-lint = "zenplate.scripts.format_and_lint:cli"
 zenplate-test = "zenplate.scripts.test:cli"
 
 [tool.ruff]
+line-length = 119
 exclude = [
     "tests/fixtures/**/*"
 ]
@@ -74,6 +76,10 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 docstring-code-format = false
 docstring-code-line-length = "dynamic"
+
+[tool.isort]
+profile = "black"
+line_length = 119
 
 [tool.pytest.ini_options]
 addopts = "-ra -q"

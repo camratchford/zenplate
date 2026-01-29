@@ -4,11 +4,9 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from zenplate.config import Config
-
-from zenplate.plugins.plugin_manager import PluginManager
-from zenplate.plugins import JinjaFilterPlugin, JinjaTestPlugin
 from zenplate.exceptions import ZenplateException
-
+from zenplate.plugins import JinjaFilterPlugin, JinjaTestPlugin
+from zenplate.plugins.plugin_manager import PluginManager
 
 logger = logging.getLogger(__name__)
 
@@ -63,9 +61,7 @@ class TemplateManager(object):
         output_path = Path(self.config.output_path)
         if not output_path.exists() or self.config.force_overwrite:
             template_list = self.env.loader.list_templates()
-            output_path_list = [
-                self.transform_path_name(path) for path in template_list
-            ]
+            output_path_list = [self.transform_path_name(path) for path in template_list]
 
             template_dict = {
                 name: {"path": path, "content": self.env.get_template(name).render()}
@@ -73,9 +69,7 @@ class TemplateManager(object):
             }
             return template_dict
         else:
-            logger.warning(
-                f"{output_path} already exists. Use --force flag to write to an existing directory."
-            )
+            logger.warning(f"{output_path} already exists. Use --force flag to write to an existing directory.")
 
     def render_template(self):
         template_name = Path(self.template_path).name

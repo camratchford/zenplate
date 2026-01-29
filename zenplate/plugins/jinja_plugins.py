@@ -1,7 +1,7 @@
 import logging
-from zenplate.plugins.base import Plugin
-from zenplate.exceptions import ZenplateException
 
+from zenplate.exceptions import ZenplateException
+from zenplate.plugins.base import Plugin
 
 logger = logging.getLogger(__name__)
 
@@ -16,9 +16,7 @@ class JinjaFilterPlugin(Plugin):
         try:
             return cls.func(*args, **kwargs)
         except Exception as e:
-            raise ZenplateJinjaPluginException(
-                f"Error invoking Jinja filter plugin: {e}"
-            )
+            raise ZenplateJinjaPluginException(f"Error invoking Jinja filter plugin: {e}")
 
 
 class JinjaTestPlugin(Plugin):

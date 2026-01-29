@@ -1,5 +1,4 @@
 import logging
-
 from pathlib import Path
 
 from zenplate.exceptions import ZenplateException
@@ -46,9 +45,7 @@ class OutputHandler(object):
             name, properties = template_dict.popitem()
             path = properties.get("path")
             if path.exists() and not self.config.force_overwrite:
-                logger.error(
-                    f"File '{path.resolve()}' already exists, use --force to overwrite"
-                )
+                logger.error(f"File '{path.resolve()}' already exists, use --force to overwrite")
                 return
             parent_path = path.parent.resolve()
             content = properties.get("content")

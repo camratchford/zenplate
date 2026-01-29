@@ -1,8 +1,8 @@
 import os
 
-from zenplate.template_data import TemplateData
+from config_fixtures import fixtures, new_config
 
-from config_fixtures import new_config, fixtures
+from zenplate.template_data import TemplateData
 
 
 def test_template_vars_initializes_with_config():

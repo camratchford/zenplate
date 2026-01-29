@@ -29,12 +29,9 @@ jobs:
     - name: Lint with ruff
       run: zenplate-format-and-lint
     - name: Test with pytest
-      run: zenplate-run-tests
+      run: zenplate-test
     - name: Build the distribution package
-      run: |
-        mkdir -p dist
-        python -m build --wheel --outdir dist
-        python -m build --sdist --outdir dist
+      run: zenplate-build
     - name: Build docs
       run: extras/scripts/mkdocs.sh
     - name: pypi-publish

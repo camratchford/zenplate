@@ -1,8 +1,8 @@
 from time import sleep
 
-from zenplate.config import Config
-
 from config_fixtures import fixtures
+
+from zenplate.config import Config
 
 
 def test_config_init():
@@ -53,9 +53,7 @@ def test_config_configure_from_path():
     non_matching = [
         k
         for k, v in config2._data.items()
-        if k in config._data.keys()
-        and k != "config_file"
-        and config.get(k) != config2.get(k)
+        if k in config._data.keys() and k != "config_file" and config.get(k) != config2.get(k)
     ]
 
     if non_matching:

@@ -1,7 +1,7 @@
 import logging
-from zenplate.plugins.base import Plugin
-from zenplate.exceptions import ZenplateException
 
+from zenplate.exceptions import ZenplateException
+from zenplate.plugins.base import Plugin
 
 logger = logging.getLogger(__name__)
 

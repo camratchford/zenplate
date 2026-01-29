@@ -1,14 +1,14 @@
+import argparse
 import re
 import sys
-from packaging.version import Version
-import argparse
 
+from packaging.version import Version
 
 from .common import (
-    run,
+    check_package_installed_as_editable,
     get_current_version,
     pyproject_dot_toml,
-    check_package_installed_as_editable,
+    run,
 )
 
 
@@ -27,7 +27,7 @@ def get_new_version(version: Version, magnitude: str) -> str:
         return f"{version.major + 1}.0.0"
 
     else:
-        print(f"::error:: Invalid version bump magnitude: {magnitude}")
+        print(f"Error: Invalid version bump magnitude: {magnitude}")
         sys.exit(1)
 
 

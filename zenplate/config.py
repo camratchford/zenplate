@@ -1,13 +1,11 @@
 import logging
-from typing import Annotated, Optional
 from pathlib import Path
-
-from zenplate.setup_logging import setup_logging
-
-from zenplate.exceptions import ZenplateException
+from typing import Annotated, Optional
 
 from byoconfig import Config as BYOConfig
 
+from zenplate.exceptions import ZenplateException
+from zenplate.setup_logging import setup_logging
 
 logger = logging.getLogger(__name__)
 

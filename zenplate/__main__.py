@@ -2,11 +2,10 @@ import logging
 import sys
 
 from zenplate.config import Config
-from zenplate.template_manager import TemplateManager
-from zenplate.template_data import TemplateData
-from zenplate.output_handler import OutputHandler
 from zenplate.exceptions import ZenplateException
-
+from zenplate.output_handler import OutputHandler
+from zenplate.template_data import TemplateData
+from zenplate.template_manager import TemplateManager
 
 logger = logging.getLogger(__name__)
 

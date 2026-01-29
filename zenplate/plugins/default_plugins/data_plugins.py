@@ -28,9 +28,7 @@ def data_default_variables(*args, **kwargs):
         "sys": {
             "defaultencoding": sys.getdefaultencoding(),
             "platform": sys.platform,
-            "winver": sys.getwindowsversion().major
-            if sys.platform == "win32"
-            else None,
+            "winver": sys.getwindowsversion().major if sys.platform == "win32" else None,
         }
     }
     variables.update(sys_vars)

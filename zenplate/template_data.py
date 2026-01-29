@@ -4,10 +4,9 @@ from typing import List, Optional
 
 import yaml
 
-from zenplate.plugins.plugin_manager import PluginManager
-from zenplate.plugins import DataPlugin
 from zenplate.exceptions import ZenplateException
-
+from zenplate.plugins import DataPlugin
+from zenplate.plugins.plugin_manager import PluginManager
 
 logger = logging.getLogger(__name__)
 
@@ -29,10 +28,7 @@ class TemplateData(object):
             try:
                 data_plugin_manager = PluginManager(DataPlugin)
                 data_plugin_manager.load_plugins(self.config.plugin_config)
-                data = {
-                    k: data_plugin_manager.invoke_plugin(k)
-                    for k, v in data_plugin_manager.plugins.items()
-                }
+                data = {k: data_plugin_manager.invoke_plugin(k) for k, v in data_plugin_manager.plugins.items()}
 
                 self.vars.update(data)
 
@@ -56,9 +52,7 @@ class TemplateData(object):
             for v in variables:
                 try:
                     if "=" not in v:
-                        logger.warning(
-                            f"Variable '{v}' is not parsable as a key:value pair, skipping."
-                        )
+                        logger.warning(f"Variable '{v}' is not parsable as a key:value pair, skipping.")
                         continue
                     split_var = v.split("=")
 
@@ -72,6 +66,4 @@ class TemplateData(object):
                         self.vars[var_key] = var_value
 
                 except ValueError as e:
-                    raise ZenplateVariableException(
-                        f"Variable '{v}' could not be parsed {e}"
-                    )
+                    raise ZenplateVariableException(f"Variable '{v}' could not be parsed {e}")

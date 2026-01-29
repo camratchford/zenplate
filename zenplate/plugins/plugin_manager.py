@@ -1,15 +1,13 @@
+import importlib
+import importlib.util
+import inspect
 import logging
+import pkgutil
 from pathlib import Path
 from typing import Type
 
-import importlib
-import importlib.util
-import pkgutil
-import inspect
-
-from zenplate.plugins.base import Plugin
 from zenplate.exceptions import ZenplateException
-
+from zenplate.plugins.base import Plugin
 
 logger = logging.getLogger(__name__)
 
@@ -74,9 +72,7 @@ class PluginManager:
             if name.startswith(self.plugin_search_string)
         ]
         plugins = {}
-        plugin_names = [
-            name for finder, name, is_pkg in pkgutil.iter_modules() if is_pkg
-        ]
+        plugin_names = [name for finder, name, is_pkg in pkgutil.iter_modules() if is_pkg]
         print(sorted(plugin_names))
 
         # todo: I'm sure there's a better way
@@ -89,24 +85,16 @@ class PluginManager:
     def find_plugins_from_path(self, module_path: str):
         plugin_dir = Path(module_path).resolve()
         if not Path(module_path).exists():
-            raise ZenplatePluginManagerException(
-                f"Plugin module: {module_path} does not exist"
-            )
+            raise ZenplatePluginManagerException(f"Plugin module: {module_path} does not exist")
         plugins = {}
         for filename in plugin_dir.iterdir():
             if filename.name.startswith("__"):
                 continue
             filename: Path
             if filename.suffix == ".py":
-                module_name = (
-                    str(filename.relative_to(plugin_dir.parent))
-                    .replace("\\", ".")
-                    .rstrip(".py")
-                )
+                module_name = str(filename.relative_to(plugin_dir.parent)).replace("\\", ".").rstrip(".py")
 
-                spec = importlib.util.spec_from_file_location(
-                    module_name, str(filename)
-                )
+                spec = importlib.util.spec_from_file_location(module_name, str(filename))
                 module = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(module)
                 plugins.update(self.find_plugins_from_module(module))
@@ -116,11 +104,7 @@ class PluginManager:
     def find_plugins_from_module(self, module) -> dict:
         results = {}
         for name, obj in inspect.getmembers(module):
-            if (
-                inspect.isclass(obj)
-                and issubclass(obj, self.base_class)
-                and obj != self.base_class
-            ):
+            if inspect.isclass(obj) and issubclass(obj, self.base_class) and obj != self.base_class:
                 logger.debug(f"Found plugin: {obj.name} in {module.__name__} module")
                 results[obj.name] = obj
 
@@ -148,9 +132,7 @@ class PluginManager:
     def invoke_plugin(self, plugin_name: str, *args, **kwargs):
         plugin = self._plugins.get(plugin_name)
         if not plugin:
-            raise ZenplatePluginManagerException(
-                f"Plugin '{plugin_name}' not found in the plugin manager"
-            )
+            raise ZenplatePluginManagerException(f"Plugin '{plugin_name}' not found in the plugin manager")
 
         plugin_kwargs = {}
         if plugin and plugin.get("class") and hasattr(plugin.get("class"), "kwargs"):

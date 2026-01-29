@@ -1,7 +1,8 @@
-from slugify import slugify
 from re import compile
 
-from zenplate.plugins import plugin_wrapper, JinjaTestPlugin, JinjaFilterPlugin
+from slugify import slugify
+
+from zenplate.plugins import JinjaFilterPlugin, JinjaTestPlugin, plugin_wrapper
 
 python_path_regex = r"[^-a-z0-9_]+.py"
 

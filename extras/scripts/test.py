@@ -1,7 +1,4 @@
-from .common import (
-    run,
-    check_package_installed_as_editable,
-)
+from .common import check_package_installed_as_editable, run
 
 
 def cli():

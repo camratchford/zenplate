@@ -1,8 +1,9 @@
-import subprocess
+import re
 import site
+import subprocess
 from pathlib import Path
 from sys import exit
-import re
+
 from packaging.version import Version
 
 this_directory = Path(__file__).parent
@@ -22,7 +23,7 @@ def run(cmd):
     Returns:
         subprocess.CompletedProcess
     """
-    print(f"::info:: Running: {cmd}")
+    print(f"Running: {cmd}")
     return subprocess.run(
         cmd,
         shell=True,
@@ -42,15 +43,13 @@ def check_package_installed_as_editable(package: str = package_name):
     for path in site.getsitepackages() + [site.getusersitepackages()]:
         if not Path(path).exists():
             continue
-        editable_pkgs = [
-            p.name for p in Path(path).iterdir() if p.is_file() and p.suffix == ".pth"
-        ]
+        editable_pkgs = [p.name for p in Path(path).iterdir() if p.is_file() and p.suffix == ".pth"]
         for pkg in editable_pkgs:
             if package in pkg:
                 return
 
     print(
-        "::error:: "
+        "Error: "
         "Ensure the current project's Python package was installed with the editable option `pip -e`. "
         "The relative path of the project root, and therefore the path to the tests directory depend on the "
         "package being installed this way."
@@ -66,9 +65,7 @@ def get_current_branch():
 def check_branch(target_branch: str = "main"):
     current_branch = get_current_branch()
     if current_branch != target_branch:
-        print(
-            f"::error:: You must be on the main branch to release. Current branch is '{current_branch}'."
-        )
+        print(f"Error: You must be on the main branch to release. Current branch is '{current_branch}'.")
         exit(1)
 
 
@@ -76,6 +73,6 @@ def get_current_version() -> Version:
     content = pyproject_dot_toml.read_text()
     match = re.search(r'^version\s*=\s*["\'](.+?)["\']', content, re.MULTILINE)
     if not match:
-        print("::error:: Version not found in pyproject.toml")
+        print("Error: Version not found in pyproject.toml")
         exit(1)
     return Version(match.group(1))

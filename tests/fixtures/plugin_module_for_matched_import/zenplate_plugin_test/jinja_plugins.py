@@ -1,5 +1,5 @@
-from zenplate.plugins.jinja_plugins import JinjaTestPlugin, JinjaFilterPlugin
 from zenplate.plugins.base import plugin_wrapper
+from zenplate.plugins.jinja_plugins import JinjaFilterPlugin, JinjaTestPlugin
 
 
 @plugin_wrapper("jinja_test", JinjaTestPlugin)
