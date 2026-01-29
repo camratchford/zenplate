@@ -51,10 +51,9 @@ Source = 'https://github.com/camratchford/zenplate'
 [project.scripts]
 zenplate = "zenplate.cli:cli"
 zenplate-version-bump = "zenplate.scripts.bump_version:cli"
-zenplate-build-and-publish = "zenplate.scripts.build_and_publish:cli"
+zenplate-build = "zenplate.scripts.build:cli"
 zenplate-format-and-lint = "zenplate.scripts.format_and_lint:cli"
-zenplate-run-tests = "zenplate.scripts.run_tests:cli"
-zenplate-do-release = "zenplate.scripts.do_github_release:cli"
+zenplate-test = "zenplate.scripts.test:cli"
 
 [tool.ruff]
 exclude = [
