@@ -1,6 +1,6 @@
 import logging
-from typing import Union
 from pathlib import Path
+from typing import Union
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
@@ -78,9 +78,7 @@ class TemplateManager(object):
 
             template_dict = {}
             for template_name, output_path in zip(template_list, output_path_list):
-                template_dict.update(
-                    self._render_template(template_name, output_path)
-                )
+                template_dict.update(self._render_template(template_name, output_path))
 
             return template_dict
 

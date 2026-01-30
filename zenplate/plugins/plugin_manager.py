@@ -33,18 +33,14 @@ class PluginManager:
         found_plugins = {}
         for module in path_modules:
             if not Path(module).exists():
-                raise FileNotFoundError(
-                    f"Error loading plugin path module ({module}). Path does not exist."
-                )
+                raise FileNotFoundError(f"Error loading plugin path module ({module}). Path does not exist.")
             found_plugins.update(self.find_plugins_from_path(module))
 
         named_modules = self.plugin_config.get("named_modules", [])
         for module in named_modules:
             loader = importlib.util.find_spec(module)
             if loader is None:
-                raise ImportError(
-                    f"Error loading plugin named module ({module}). Loader does not exist."
-                )
+                raise ImportError(f"Error loading plugin named module ({module}). Loader does not exist.")
             found_plugins.update(self.find_plugins_by_module_name(module))
 
         matching_plugins = self.find_matching_plugins()

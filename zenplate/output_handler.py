@@ -10,9 +10,7 @@ class OutputHandler(object):
 
     def write_tree(self, template_dict: dict):
         if Path(self.config.output_path).exists() and not self.config.force_overwrite:
-            raise FileExistsError(
-                f"Output path '{self.config.output_path}' already exists, use --force to overwrite."
-            )
+            raise FileExistsError(f"Output path '{self.config.output_path}' already exists, use --force to overwrite.")
 
         if not Path(self.config.output_path).exists():
             logger.debug(f"Creating output directory {self.config.output_path}")
@@ -40,8 +38,7 @@ class OutputHandler(object):
             path = properties.get("path")
             if path.exists() and not self.config.force_overwrite:
                 raise FileExistsError(
-                    f"File '{path.resolve()}' already exists, "
-                    "use --force to overwrite existing files."
+                    f"File '{path.resolve()}' already exists, use --force to overwrite existing files."
                 )
 
             parent_path = path.parent.resolve()

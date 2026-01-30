@@ -94,7 +94,7 @@ def run(
             show_default=True,
             envvar="ZENPLATE_LOG_LEVEL",
         ),
-    ] = 'ERROR',
+    ] = "ERROR",
     export_config: Annotated[
         bool,
         typer.Option(
@@ -154,7 +154,7 @@ def run(
     elif template and template.is_file():
         config.set("template_path", template)
     elif not template:
-        typer.echo(f"No template parameter provided.", err=True)
+        typer.echo("No template parameter provided.", err=True)
         exit(1)
     else:
         typer.echo(f"Template path '{template}' is not a file or directory.", err=True)
