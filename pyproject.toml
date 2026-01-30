@@ -25,7 +25,7 @@ classifiers = [
     'Topic :: Software Development :: Build Tools',
     'Topic :: Utilities',
 ]
-version = "0.2.0"
+version = "0.3.0"
 requires-python = '>=3.10'
 dependencies = [
     "byoconfig==1.2.3",
