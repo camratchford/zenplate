@@ -8,7 +8,7 @@ def template_manager_loads_template():
     config = new_config()
     config.template_path = fixtures / "templates" / "template.html"
     template_manager = TemplateManager(config)
-    assert template_manager.render_template() is not None
+    assert template_manager.render_single_template() is not None
 
 
 def template_manager_raises_error_for_missing_template():
@@ -16,7 +16,7 @@ def template_manager_raises_error_for_missing_template():
     config.template_path = fixtures / "templates" / "non_existent_template.html"
     template_manager = TemplateManager(config)
     try:
-        template_manager.render_template()
+        template_manager.render_single_template()
         assert False, "Expected an exception for missing template"
     except FileNotFoundError:
         pass
@@ -28,7 +28,7 @@ def template_manager_handles_empty_template():
     config = new_config()
     config.template_path = fixtures / "templates" / "empty_template.html"
     template_manager = TemplateManager(config)
-    template = template_manager.render_template().get("content")
+    template = template_manager.render_single_template().get("content")
     assert template is None, f"Expected empty template content, got {template}"
 
 

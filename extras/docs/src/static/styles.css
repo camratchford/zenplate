@@ -1,8 +1,12 @@
 :root, [data-md-color-scheme=default] {
-    --md-typeset-a-color:  #0dbd8b;
+    --md-typeset-a-color: #0dbd8b;
     --md-typeset-table-color: #f0f0f0;
 }
 
+.md-nav__link {
+    color: var(--md-typeset-a-color);
+    transition: color 10ms ease-in-out;
+}
 
 .md-nav__link[for]:focus,
 .md-nav__link[for]:hover,
@@ -11,13 +15,8 @@
     color: #262626;
 }
 
-
 .md-header {
     background: #262626;
-}
-
-.md-nav__link {
-    color: var(--md-typeset-a-color);
 }
 
 .md-grid {

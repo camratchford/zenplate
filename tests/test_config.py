@@ -2,11 +2,11 @@ from time import sleep
 
 from config_fixtures import fixtures
 
-from zenplate.config import Config
+from zenplate.config import ZenplateConfig
 
 
 def test_config_init():
-    config = Config()
+    config = ZenplateConfig()
 
     assert config.config_file is None
     assert config.tree_directory is None
@@ -41,8 +41,8 @@ def test_config_init():
 
 
 def test_config_configure_from_path():
-    config = Config()
-    config2 = Config()
+    config = ZenplateConfig()
+    config2 = ZenplateConfig()
 
     config_path = fixtures.parent.joinpath("output", "exported_config.yml")
     config.config_file = config_path
@@ -61,7 +61,7 @@ def test_config_configure_from_path():
 
 
 def test_config_export_config():
-    config = Config()
+    config = ZenplateConfig()
     default_config_file = fixtures / "configs" / "from_defaults.yml"
     config.dump_to_file(default_config_file)
     config.config_file = fixtures / "output" / "exported_config.yml"
