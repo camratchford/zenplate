@@ -45,7 +45,7 @@ class TemplateManager(object):
                 self.env.filters.update(filters)
             except Exception as e:
                 logger.error(f"An unhandled exception occurred while loading Jinja2 filter plugins: {e}")
-                logger.error(f"Error loading jinja filter plugins: {e}")
+                raise e
 
             try:
                 jinja_test_plugin_manager = PluginManager(JinjaTestPlugin)
