@@ -86,8 +86,9 @@ class TemplateManager(object):
             return template_dict
 
         else:
-            logger.error(f"{dir_output_path} already exists. Use --force flag to write to an existing directory.")
-            return {}
+            raise FileExistsError(
+                f"{dir_output_path} already exists. Use --force flag to write to an existing directory."
+            )
 
     def render_single_template(self) -> dict[str, dict[str, Union[str, Path]]]:
         template_name = Path(self.template_path).name
