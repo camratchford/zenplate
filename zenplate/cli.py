@@ -9,8 +9,7 @@ import typer
 from typing_extensions import Annotated
 
 from zenplate.__main__ import main
-from zenplate.config import Config
-from zenplate.exceptions import ZenplateException
+from zenplate.config import ZenplateConfig
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +23,7 @@ class LogLevels(str, Enum):
     warning = "WARNING"
     error = "ERROR"
     critical = "CRITICAL"
+    default = None
 
 
 @cli.command("", no_args_is_help=True)
@@ -34,6 +34,7 @@ def run(
             help="The path to the jinja template / directory that zenplate will render",
             dir_okay=True,
             file_okay=True,
+            readable=True,
         ),
     ] = None,
     output: Annotated[
@@ -52,6 +53,7 @@ def run(
             help="The location of the YAML configuration file",
             show_default=True,
             dir_okay=False,
+            readable=True,
             envvar="ZENPLATE_CONFIG_FILE",
         ),
     ] = None,
@@ -62,7 +64,7 @@ def run(
             "-v",
             help="A 'varname=value' pair representing a variable. May be used multiple times.",
         ),
-    ] = None,
+    ] = tuple(),
     var_file: Annotated[
         Optional[List[Path]],
         typer.Option(
@@ -71,9 +73,10 @@ def run(
             help="The path to a YAML file containing key: value pairs to be used as variables. "
             "May be used multiple times.",
             dir_okay=False,
+            readable=True,
             envvar="ZENPLATE_VAR_FILE",
         ),
-    ] = None,
+    ] = tuple(),
     log_path: Annotated[
         Optional[Path],
         typer.Option(
@@ -91,7 +94,7 @@ def run(
             show_default=True,
             envvar="ZENPLATE_LOG_LEVEL",
         ),
-    ] = LogLevels.error,
+    ] = 'ERROR',
     export_config: Annotated[
         bool,
         typer.Option(
@@ -108,14 +111,6 @@ def run(
             "--force",
             "-f",
             help="When provided, output will overwrite any file in that path",
-            is_flag=True,
-        ),
-    ] = False,
-    stdout: Annotated[
-        bool,
-        typer.Option(
-            "--stdout",
-            help="Write rendered template to stdout",
             is_flag=True,
         ),
     ] = False,
@@ -145,39 +140,41 @@ def run(
     except Exception as e:
         raise e
 
-    config = Config(file_path=config_file)
+    config = ZenplateConfig(file_path=config_file)
+    if log_path != config.log_path:
+        config.set("log_path", log_path)
+    if variables != config.variables:
+        config.set("variables", variables)
+    if var_file != config.var_files:
+        var_file_paths = [Path(i) for i in var_file]
+        config.set("var_files", var_file_paths)
 
-    if log_path:
-        config.log_path = log_path
-    if variables:
-        config.variables = variables
-    if var_file:
-        config.var_files = [Path(i) for i in var_file]
     if template and template.is_dir():
-        config.tree_directory = template
+        config.set("tree_directory", template)
     elif template and template.is_file():
-        config.template_path = template
+        config.set("template_path", template)
     elif not template:
-        pass
+        typer.echo(f"No template parameter provided.", err=True)
+        exit(1)
     else:
         typer.echo(f"Template path '{template}' is not a file or directory.", err=True)
         exit(1)
-    if output and export_config:
-        config.output_path = Path(output)
+
+    config.set("output_path", Path(output))
+    if export_config:
         config.dump_to_file(config.output_path)
         exit(0)
-
-    config.force_overwrite = force
-    config.stdout = stdout
-    config.log_level = log_level
-    config.verbose = verbose
+    if force:
+        config.set("force_overwrite", force)
+    if log_level != config.log_level:
+        config.set("log_level", log_level)
+    if verbose != config.verbose:
+        config.set("verbose", verbose)
 
     try:
         main(config)
-    except ZenplateException as e:
-        typer.echo(str(e), err=True)
-        exit(1)
     except Exception as e:
+        typer.echo(e, err=True)
         raise e
 
 

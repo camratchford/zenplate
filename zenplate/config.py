@@ -2,19 +2,14 @@ import logging
 from pathlib import Path
 from typing import Annotated, Optional
 
-from byoconfig import Config as BYOConfig
+from byoconfig import Config
 
-from zenplate.exceptions import ZenplateException
 from zenplate.setup_logging import setup_logging
 
 logger = logging.getLogger(__name__)
 
 
-class ZenplateConfigException(ZenplateException):
-    pass
-
-
-class Config(BYOConfig):
+class ZenplateConfig(Config):
     config_file: Annotated[Path, "excluded"] = None
     template_path: Annotated[Path, "excluded"] = None
     tree_directory: Annotated[Path, "excluded"] = None
@@ -40,7 +35,8 @@ class Config(BYOConfig):
     stdout: bool = False
     verbose: bool = False
 
-    def __init__(self, **kwargs):
+    def __init__(self, file_path: Path = None):
+        self.config_file = file_path
         self.var_files = []
 
         self.jinja_env_trim_blocks = False
@@ -51,10 +47,12 @@ class Config(BYOConfig):
         self.dry_run: bool = False
         self.log_level: str = "ERROR"
         self.log_path: Optional[Path] = None
-        self.stdout: bool = False
         self.verbose: bool = False
         self.force_overwrite: bool = False
 
         setup_logging(log_path=self.log_path, log_level=self.log_level)
-        super().__init__(config_assign_attrs=True, **kwargs)
+        super().__init__(
+            config_assign_attrs=True,
+            file_path=file_path,
+        )
         logger.debug(f"Config initialized with {self.__dict__}")

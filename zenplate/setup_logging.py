@@ -1,5 +1,10 @@
+import warnings
 import logging
 import logging.config
+
+# Click emits these when it gets multiple identical option args, such as --force, -f
+# It doesn't break the program, so we ignore them
+warnings.filterwarnings('ignore', category=UserWarning)
 
 
 def setup_logging(log_level: str = "ERROR", log_path: str = None):

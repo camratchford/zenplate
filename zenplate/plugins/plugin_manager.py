@@ -6,14 +6,9 @@ import pkgutil
 from pathlib import Path
 from typing import Type
 
-from zenplate.exceptions import ZenplateException
 from zenplate.plugins.base import Plugin
 
 logger = logging.getLogger(__name__)
-
-
-class ZenplatePluginManagerException(ZenplateException):
-    pass
 
 
 class PluginManager:
@@ -38,7 +33,7 @@ class PluginManager:
         found_plugins = {}
         for module in path_modules:
             if not Path(module).exists():
-                raise ZenplatePluginManagerException(
+                raise FileNotFoundError(
                     f"Error loading plugin path module ({module}). Path does not exist."
                 )
             found_plugins.update(self.find_plugins_from_path(module))
@@ -47,7 +42,7 @@ class PluginManager:
         for module in named_modules:
             loader = importlib.util.find_spec(module)
             if loader is None:
-                raise ZenplatePluginManagerException(
+                raise ImportError(
                     f"Error loading plugin named module ({module}). Loader does not exist."
                 )
             found_plugins.update(self.find_plugins_by_module_name(module))
@@ -73,7 +68,6 @@ class PluginManager:
         ]
         plugins = {}
         plugin_names = [name for finder, name, is_pkg in pkgutil.iter_modules() if is_pkg]
-        print(sorted(plugin_names))
 
         # todo: I'm sure there's a better way
         for module in matching_modules:
@@ -85,7 +79,7 @@ class PluginManager:
     def find_plugins_from_path(self, module_path: str):
         plugin_dir = Path(module_path).resolve()
         if not Path(module_path).exists():
-            raise ZenplatePluginManagerException(f"Plugin module: {module_path} does not exist")
+            raise ImportError(f"Plugin module: {module_path} does not exist")
         plugins = {}
         for filename in plugin_dir.iterdir():
             if filename.name.startswith("__"):
@@ -132,7 +126,7 @@ class PluginManager:
     def invoke_plugin(self, plugin_name: str, *args, **kwargs):
         plugin = self._plugins.get(plugin_name)
         if not plugin:
-            raise ZenplatePluginManagerException(f"Plugin '{plugin_name}' not found in the plugin manager")
+            raise KeyError(f"Plugin '{plugin_name}' not found in the plugin manager")
 
         plugin_kwargs = {}
         if plugin and plugin.get("class") and hasattr(plugin.get("class"), "kwargs"):

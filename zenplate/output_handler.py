@@ -1,13 +1,7 @@
 import logging
 from pathlib import Path
 
-from zenplate.exceptions import ZenplateException
-
 logger = logging.getLogger(__name__)
-
-
-class OutputHandlerException(ZenplateException):
-    pass
 
 
 class OutputHandler(object):
@@ -16,7 +10,7 @@ class OutputHandler(object):
 
     def write_tree(self, template_dict: dict):
         if Path(self.config.output_path).exists() and not self.config.force_overwrite:
-            raise OutputHandlerException(
+            raise FileExistsError(
                 f"Output path '{self.config.output_path}' already exists, use --force to overwrite."
             )
 
@@ -38,15 +32,18 @@ class OutputHandler(object):
                     path.touch(exist_ok=True, mode=0o755)
                     path.write_text(content, encoding="utf-8")
                 except Exception as e:
-                    logger.error(e, f"Could not write {name}")
+                    raise IOError(f"Error occurred during tree writing. Could not write {name}: {e}") from e
 
     def write_file(self, template_dict: dict):
         if template_dict:
             name, properties = template_dict.popitem()
             path = properties.get("path")
             if path.exists() and not self.config.force_overwrite:
-                logger.error(f"File '{path.resolve()}' already exists, use --force to overwrite")
-                return
+                raise FileExistsError(
+                    f"File '{path.resolve()}' already exists, "
+                    "use --force to overwrite existing files."
+                )
+
             parent_path = path.parent.resolve()
             content = properties.get("content")
             if not parent_path.exists():
@@ -57,7 +54,4 @@ class OutputHandler(object):
                 path.touch(exist_ok=True, mode=0o755)
                 path.write_text(content, encoding="utf-8")
             except Exception as e:
-                logger.error(e, f"Could not write {name}")
-
-    def write_stdout(self, output_path: Path):
-        print(output_path.read_text())
+                raise IOError(f"Error occurred during file writing. Could not write {name}: {e}") from e

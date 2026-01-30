@@ -4,15 +4,10 @@ from typing import List, Optional
 
 import yaml
 
-from zenplate.exceptions import ZenplateException
 from zenplate.plugins import DataPlugin
 from zenplate.plugins.plugin_manager import PluginManager
 
 logger = logging.getLogger(__name__)
-
-
-class ZenplateVariableException(ZenplateException):
-    pass
 
 
 class TemplateData(object):
@@ -33,7 +28,12 @@ class TemplateData(object):
                 self.vars.update(data)
 
             except Exception as e:
-                raise ZenplateVariableException(f"Error loading data plugins: {e}")
+                logger.error(
+                    "An unhandled exception occurred while loading template variable plugin(s):"
+                    f" {', '.join(self.config.plugin_config.get('path_modules'))}"
+                    f" {', '.join(self.config.plugin_config.get('named_modules'))}"
+                )
+                raise e
 
     def load_files(self, var_files: Optional[List[Path]] = None):
         for var_file in var_files:
@@ -45,7 +45,8 @@ class TemplateData(object):
                         logger.debug(f"Loaded variables: {file_vars}")
                         self.vars.update(file_vars)
                 except Exception as e:
-                    raise ZenplateVariableException(f"Error loading data plugins: {e}")
+                    logger.error(f"An unhandled exception occurred while loading variable file(s): {var_files}")
+                    raise e
 
     def load(self, variables: Optional[List[str]] = None):
         if variables:
@@ -66,4 +67,8 @@ class TemplateData(object):
                         self.vars[var_key] = var_value
 
                 except ValueError as e:
-                    raise ZenplateVariableException(f"Variable '{v}' could not be parsed {e}")
+                    raise ValueError(f"Variable '{v}' could not be parsed: {e}") from e
+
+                except Exception as e:
+                    logger.error(f"An unhandled exception occurred while loading template variable(s): {variables}")
+                    raise e
