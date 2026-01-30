@@ -17,20 +17,23 @@ class TemplateManager(object):
 
         self.template_path = config.template_path
         self.tree_dir = config.tree_directory
+        self.jinja_env_kwargs = config.get_by_prefix(prefix="jinja_env", trim_prefix=True)
         if self.template_path:
             self.template_parent = Path(self.template_path).parent
             self.template_name = Path(self.template_path)
-            self.env = Environment(
+            self.jinja_env_kwargs.update(
                 loader=FileSystemLoader(self.template_parent),
                 autoescape=select_autoescape(),
-                **config.get_by_prefix(prefix="jinja_env", trim_prefix=True),
             )
+
         elif self.tree_dir:
             self.tree_dir = Path(config.tree_directory)
-            self.env = Environment(
+            self.jinja_env_kwargs.update(
                 loader=FileSystemLoader(self.tree_dir),
                 autoescape=select_autoescape(),
             )
+
+        self.env = Environment(**self.jinja_env_kwargs)
         self.load_plugins()
 
     def load_plugins(self):
